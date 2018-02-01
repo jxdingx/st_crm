@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.HomeStaMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.HomeStaModel">
+		<result column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="homework_id" property="homeworkId" />
+		<result column="oneself_score" property="oneselfScore" />
+		<result column="oneself_grade" property="oneselfGrade" />
+		<result column="teacher_score" property="teacherScore" />
+		<result column="teacher_grade" property="teacherGrade" />
+		<result column="remark" property="remark" />
+		<result column="status" property="status" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+
+		<if test="homeworkId != null">
+			and homework_id = #{homeworkId}
+		</if>
+
+		<if test="oneselfScore != null and oneselfScore != ''">
+			and oneself_score = #{oneselfScore}
+		</if>
+		<if test="oneselfGrade != null and oneselfGrade != ''">
+			and oneself_grade = #{oneselfGrade}
+		</if>
+		<if test="teacherScore != null and teacherScore != ''">
+			and teacher_score = #{teacherScore}
+		</if>
+		<if test="teacherGrade != null and teacherGrade != ''">
+			and teacher_grade = #{teacherGrade}
+		</if>
+		<if test="remark != null and remark != ''">
+			and remark = #{remark}
+		</if>
+		<if test="status != null and status != ''">
+			and status = #{status}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_home_status
+		(user_id,homework_id,oneself_score,oneself_grade,teacher_score,teacher_grade,remark,status,create_time)
+		values(#{userId},#{homeworkId},#{oneselfScore},#{oneselfGrade},#{teacherScore},#{teacherGrade},#{remark},#{status},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from
+		st_crm.t_home_status
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_home_status
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_home_status set
+		user_id=#{userId},homework_id=#{homeworkId},oneself_score=#{oneselfScore},oneself_grade=#{oneselfGrade},
+		teacher_score=#{teacherScore},teacher_grade=#{teacherGrade},remark=#{remark},status=#{status},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_home_status set
+		<trim suffixOverrides=",">
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="homeworkId != null">
+				homework_id = #{homeworkId},
+			</if>
+
+			<if test="oneselfScore != null and oneselfScore != ''">
+				oneself_score = #{oneselfScore},
+			</if>
+			<if test="oneselfGrade != null and oneselfGrade != ''">
+				oneself_grade = #{oneselfGrade},
+			</if>
+			<if test="teacherScore != null and teacherScore != ''">
+				teacher_score = #{teacherScore},
+			</if>
+			<if test="teacherGrade != null and teacherGrade != ''">
+				teacher_grade = #{teacherGrade},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark = #{remark},
+			</if>
+			<if test="status != null and status != ''">
+				status = #{status},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_home_status where id = #{id}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_home_status
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_home_status
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_home_status
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

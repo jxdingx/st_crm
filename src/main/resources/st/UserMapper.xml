@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.UserMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.UserModel">
+		<result column="id" property="id" />
+		<result column="user_name" property="userName" />
+		<result column="password" property="password" />
+		<result column="true_name" property="trueName" />
+		<result column="phone" property="phone" />
+		<result column="class_id" property="classId" />
+		<result column="address" property="address" />
+		<result column="role_id" property="roleId" />
+		<result column="login_type" property="loginType" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="roleName" property="roleName" />
+	</resultMap>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="userName != null and userName != ''">
+			and user_name = #{userName}
+		</if>
+		<if test="password != null and password != ''">
+			and password = #{password}
+		</if>
+		<if test="trueName != null and trueName != ''">
+			and true_name = #{trueName}
+		</if>
+		<if test="phone != null and phone != ''">
+			and phone = #{phone}
+		</if>
+		<if test="address != null and address != ''">
+			and address = #{address}
+		</if>
+		<if test="classId != null">
+			and class_id = #{classId}
+		</if>
+		<if test="roleId != null">
+			and role_id = #{roleId}
+		</if>
+		<if test="loginType != null">
+			and login_type = #{loginType}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_user
+		(user_name,password,true_name,phone,class_id,address,role_id,login_type,create_time)
+		values(#{userName},#{password},#{trueName},#{phone},#{classId},#{address},#{roleId},#{loginType},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from st_crm.t_user
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_user
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_user set
+		user_name = #{userName},password = #{password}, true_name =
+		#{trueName},
+		phone = #{phone}, address =
+		#{address}, class_id =
+		#{classId}, role_id =
+		#{roleId},login_type =
+		#{loginType},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_user set
+		<trim suffixOverrides=",">
+			<if test="userName != null and userName != ''">
+				user_name = #{userName},
+			</if>
+			<if test="password != null and password != ''">
+				password = #{password},
+			</if>
+			<if test="trueName != null and trueName != ''">
+				true_name = #{trueName},
+			</if>
+			<if test="phone != null and phone != ''">
+				phone = #{phone},
+			</if>
+			<if test="address != null and address != ''">
+				address = #{address},
+			</if>
+			<if test="classId != null">
+				class_id = #{classId},
+			</if>
+			<if test="roleId != null">
+				role_id = #{roleId},
+			</if>
+			<if test="loginType != null">
+				login_type = #{loginType},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_user where id = #{id}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_user
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_user
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*,(select role_name from st_crm.t_role r where u.role_id=r.id)
+		roleName
+		from st_crm.t_user u
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

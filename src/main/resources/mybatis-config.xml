@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN" "http://mybatis.org/dtd/mybatis-3-config.dtd">
+
+<configuration>
+
+	<typeAliases>
+
+	</typeAliases>
+
+	<mappers>
+		<mapper resource="st/AssessmentMapper.xml" />
+		<mapper resource="st/CheckinMapper.xml" />
+		<mapper resource="st/ClassMapper.xml" />
+		<mapper resource="st/CreateQuesMapper.xml" />
+		<mapper resource="st/CreateQuesRelMapper.xml" />
+		<mapper resource="st/DictionaryMapper.xml" />
+		<mapper resource="st/HomeStaMapper.xml" />
+		<mapper resource="st/HomeworkMapper.xml" />
+		<mapper resource="st/LeaveMapper.xml" />
+		<mapper resource="st/MenuMapper.xml" />
+		<mapper resource="st/ProjectMapper.xml" />
+		<mapper resource="st/QuestionAnswerMapper.xml" />
+		<mapper resource="st/QuestionMapper.xml" />
+		<mapper resource="st/QuestionQaMapper.xml" />
+		<mapper resource="st/RoleMapper.xml" />
+		<mapper resource="st/RolePermMapper.xml" />
+		<mapper resource="st/UserMapper.xml" />
+	</mappers>
+
+</configuration>

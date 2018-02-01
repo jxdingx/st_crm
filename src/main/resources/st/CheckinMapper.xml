@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.CheckinMapper">
+
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.CheckinModel">
+		<result column="id" property="id" />
+		<result column="user_id" property="userId" />
+		<result column="one_check" property="onecheck" />
+		<result column="two_check" property="twocheck" />
+		<result column="three_check" property="threecheck" />
+		<result column="four_check" property="fourcheck" />
+		<result column="five_check" property="fivecheck" />
+		<result column="six_check" property="sixcheck" />
+		<result column="time" property="time" />
+		<result column="score" property="score" />
+		<result column="remark" property="remark" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="userId != null">
+			and user_id = #{userId}
+		</if>
+		<if test="time != null and time != ''">
+			and time like concat(concat('%',#{time}),'%')
+		</if>
+		<if
+			test="startTime != null and startTime != '' and endTime != null and endTime != '' ">
+			and time between #{startTime} and #{endTime}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_checkin
+		(user_id,one_check,two_check,three_check,four_check,five_check,six_check,time,score,remark,create_time)
+		values(#{userId},#{onecheck},#{twocheck},#{threecheck},#{fourcheck},#{fivecheck},#{sixcheck},#{time},#{score},#{remark},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from st_crm.t_checkin
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_checkin
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_checkin set
+		user_id=#{userId},one_check=#{onecheck},two_check=#{twocheck},three_check=#{threecheck},
+		four_check=#{fourcheck},five_check=#{fivecheck},
+		six_check=#{sixcheck},time=#{time},score=#{score},remark=#{remark},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_checkin set
+		<trim suffixOverrides=",">
+			<if test="userId != null">
+				user_id = #{userId},
+			</if>
+			<if test="onecheck != null and onecheck != '' ">
+				one_check = #{onecheck},
+			</if>
+			<if test="twocheck != null and twocheck != '' ">
+				two_check = #{twocheck},
+			</if>
+			<if test="threecheck != null and threecheck != '' ">
+				three_check = #{threecheck},
+			</if>
+			<if test="fourcheck != null and fourcheck != '' ">
+				four_check = #{fourcheck},
+			</if>
+			<if test="fivecheck != null and fivecheck != '' ">
+				five_check = #{fivecheck},
+			</if>
+			<if test="sixcheck != null and sixcheck != '' ">
+				six_check = #{sixcheck},
+			</if>
+			<if test="score != null and score != '' ">
+				score = #{score},
+			</if>
+			<if test="remark != null and remark != '' ">
+				remark = #{remark},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_checkin where id = #{id}
+	</select>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectUser" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_checkin where user_id = #{userId} and time =
+		#{time}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_checkin
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_checkin
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_checkin
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

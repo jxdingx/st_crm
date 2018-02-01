@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.RolePermMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.RolePermModel">
+		<result column="id" property="id" />
+		<result column="role_id" property="roleId" />
+		<result column="menu_id" property="menuId" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="roleId != null and roleId != ''">
+			and role_id = #{roleId}
+		</if>
+		<if test="menuId != null and menuId != ''">
+			and menu_id = #{menuId}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_role_perm
+		(role_id,menu_id,create_time)
+		values(#{roleId},#{menuId},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from st_crm.t_role_perm
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_role_perm
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_role_perm set
+		role_id = #{roleId},menu_id = #{menuId},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_role_perm set
+		<trim suffixOverrides=",">
+			<if test="roleId != null">
+				role_id = #{roleId},
+			</if>
+			<if test="menuId != null and menuId != ''">
+				menu_id = #{menuId},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_role_perm where id = #{id}
+	</select>
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_role_perm
+		<include refid="Example_Where_Clause" />
+	</select>
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_role_perm
+		<include refid="Example_Where_Clause" />
+	</select>
+</mapper>

@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.MenuMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.MenuModel">
+		<result column="id" property="id" />
+		<result column="menu_code" property="menuCode" />
+		<result column="menu_parent_code" property="menuParentCode" />
+		<result column="menu_type" property="menuType" />
+		<result column="menu_name" property="menuName" />
+		<result column="menu_url" property="menuUrl" />
+		<result column="descr" property="descr" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="menuCode != null and menuCode != ''">
+			and menu_code = #{menuCode}
+		</if>
+		<if test="menuParentCode != null and menuParentCode != ''">
+			and menu_parent_code = #{menuParentCode}
+		</if>
+
+		<if test="menuType != null and menuType != ''">
+			and menu_type = #{menuType}
+		</if>
+
+		<if test="menuName != null and menuName != ''">
+			and menu_name = #{menuName}
+		</if>
+		<if test="menuUrl != null and menuUrl != ''">
+			and menu_url = #{menuUrl}
+		</if>
+
+		<if test="descr != null and descr != ''">
+			and descr = #{descr}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_menu
+		(menu_code,menu_parent_code,menu_type,menu_name,menu_url,descr,create_time)
+		values(#{menuCode},#{menuParentCode},#{menuType},#{menuName},#{menuUrl},#{descr},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from st_crm.t_menu
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_menu
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_menu set
+		menu_code = #{menuCode}, menu_parent_code =
+		#{menuParentCode},menu_type = #{menuType},menu_name = #{menuName},
+		menu_url = #{menuUrl},descr = #{descr},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_menu set
+		<trim suffixOverrides=",">
+			<if test="menuCode != null and menuCode != ''">
+				menu_code = #{menuCode},
+			</if>
+			<if test="menuParentCode != null and menuParentCode != ''">
+				menu_parent_code = #{menuParentCode},
+			</if>
+			<if test="menuType != null and menuType != ''">
+				menu_type = #{menuType},
+			</if>
+			<if test="menuName != null and menuName != ''">
+				menu_name = #{menuName},
+			</if>
+			<if test="menuUrl != null and menuUrl != ''">
+				menu_url = #{menuUrl},
+			</if>
+			<if test="descr != null and descr != ''">
+				descr = #{descr},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_menu where id = #{id}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_menu
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_menu
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<!-- <if -->
+		<!-- test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition 
+			!= ''"> -->
+		<!-- ${pager.mysqlQueryCondition} -->
+		<!-- </if> -->
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_menu
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

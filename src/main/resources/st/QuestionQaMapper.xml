@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.QuestionQaMapper">
+
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.QuestionQaModel">
+		<result column="id" property="id" />
+		<result column="title" property="title" />
+		<result column="options_A" property="optionsA" />
+		<result column="options_B" property="optionsB" />
+		<result column="options_C" property="optionsC" />
+		<result column="options_D" property="optionsD" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="title != null and title != ''">
+			and title = #{title}
+		</if>
+
+		<if test="optionsA != null and optionsA != ''">
+			and options_A = #{optionsA}
+		</if>
+		<if test="optionsB != null and optionsB != ''">
+			and options_B = #{optionsB}
+		</if>
+		<if test="optionsC != null and optionsC != ''">
+			and options_C = #{optionsC}
+		</if>
+		<if test="optionsD != null and optionsD != ''">
+			and options_D = #{optionsD}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_question_qa
+		(title,options_A,options_B,options_C,options_D,create_time)
+		values(#{title},#{optionsA},#{optionsB},#{optionsC},#{optionsD},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from
+		st_crm.t_question_qa
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_question_qa
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_question_qa set
+		title=#{title},options_A=#{optionsA},options_B=#{optionsB},options_C=#{optionsC},options_D=#{optionsD},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_question_qa set
+		<trim suffixOverrides=",">
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+			<if test="optionsA != null and optionsA != ''">
+				options_A = #{optionsA},
+			</if>
+			<if test="optionsB != null and optionsB != ''">
+				options_B = #{optionsB},
+			</if>
+			<if test="optionsC != null and optionsC != ''">
+				options_C = #{optionsC},
+			</if>
+			<if test="optionsD != null and optionsD != ''">
+				options_D = #{optionsD},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_question_qa where id = #{id}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_question_qa
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_question_qa
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_question_qa
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>

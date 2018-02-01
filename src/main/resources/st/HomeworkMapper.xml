@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.st.mapper.HomeworkMapper">
+
+	<!-- Result Map -->
+	<resultMap id="BaseResultMap" type="com.st.model.HomeworkModel">
+		<result column="id" property="id" />
+		<result column="class_id" property="classId" />
+		<result column="teacher_id" property="teacherId" />
+		<result column="title" property="title" />
+		<result column="score_standards" property="scoreStandards" />
+		<result column="time" property="time" />
+		<result column="type" property="type" />
+		<result column="remark" property="remark" />
+		<result column="create_time" property="createTime" />
+		<result column="update_time" property="updateTime" />
+		<result column="className" property="className" />
+		<result column="teacherName" property="teacherName" />
+	</resultMap>
+
+	<!-- 查询条件 -->
+	<sql id="Example_Where_Clause">
+		where 1=1
+		<if test="id != null">
+			and id = #{id}
+		</if>
+		<if test="classId != null">
+			and class_id = #{classId}
+		</if>
+		<if test="teacherId != null">
+			and teacher_id = #{teacherId}
+		</if>
+		<if test="title != null and title != ''">
+			and title = #{title}
+		</if>
+		<if test="scoreStandards != null and scoreStandards != ''">
+			and score_standards = #{scoreStandards}
+		</if>
+		<if test="time != null and time != ''">
+			and time like concat(concat('%',#{time}),'%')
+		</if>
+		<if test="type != null and type != ''">
+			and type = #{type}
+		</if>
+		<if test="remark != null and remark != ''">
+			and remark = #{remark}
+		</if>
+	</sql>
+
+	<!-- 插入记录 -->
+	<insert id="insert" parameterType="Object">
+		insert into
+		st_crm.t_homework
+		(class_id,teacher_id,title,score_standards,time,type,remark,create_time)
+		values(#{classId},#{teacherId},#{title},#{scoreStandards},#{time},#{type},#{remark},now())
+	</insert>
+
+	<!-- 根据id删除记录 -->
+	<delete id="delete" parameterType="Object">
+		delete from st_crm.t_homework
+		where id = #{id}
+	</delete>
+
+	<!-- 根据条件删除记录 -->
+	<delete id="deleteModel" parameterType="Object">
+		delete from st_crm.t_homework
+		<include refid="Example_Where_Clause" />
+	</delete>
+
+
+	<!-- 根据id，修改记录 -->
+	<update id="update" parameterType="Object">
+		update
+		st_crm.t_homework set
+		class_id = #{classId},teacher_id = #{teacherId},title = #{title},
+		score_standards = #{scoreStandards}, time = #{time}, type =
+		#{type},remark=#{remark},update_time=now()
+		where
+		id=
+		#{id}
+	</update>
+
+
+	<!-- 根据id，修改记录，只修改只不为空的字段 -->
+	<update id="updateActive" parameterType="Object">
+		update st_crm.t_homework set
+		<trim suffixOverrides=",">
+			<if test="classId != null">
+				class_id = #{classId},
+			</if>
+			<if test="teacherId != null">
+				teacher_id = #{teacherId},
+			</if>
+			<if test="title != null and title != ''">
+				title = #{title},
+			</if>
+			<if test="scoreStandards != null and scoreStandards != ''">
+				score_standards = #{scoreStandards},
+			</if>
+			<if test="time != null and time != ''">
+				time = #{time},
+			</if>
+			<if test="type != null and type != ''">
+				type = #{type},
+			</if>
+			<if test="remark != null and remark != ''">
+				remark = #{remark},
+			</if>
+			update_time=now()
+		</trim>
+		where id = #{id}
+	</update>
+
+
+	<!-- 根据id查询 -->
+	<select id="selectId" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*
+		from st_crm.t_homework where id = #{id}
+	</select>
+
+	<!-- 根据条件查询总数 -->
+	<select id="selectCount" resultType="java.lang.Integer"
+		parameterType="Object">
+		select count(1) from st_crm.t_homework
+		<include refid="Example_Where_Clause" />
+	</select>
+
+	<!-- 根据条件查询,带有分页，排序 -->
+	<select id="selectModel" resultMap="BaseResultMap"
+		parameterType="Object">
+		select
+		*
+		from st_crm.t_homework
+		<include refid="Example_Where_Clause" />
+		<if test="pager.orderCondition != null and pager.orderCondition != ''">
+			${pager.orderCondition}
+		</if>
+		<if
+			test="pager.mysqlQueryCondition != null and pager.mysqlQueryCondition != ''">
+			${pager.mysqlQueryCondition}
+		</if>
+	</select>
+
+	<!-- 根据条件查询 -->
+	<select id="selectAll" resultMap="BaseResultMap" parameterType="Object">
+		select
+		*,(select class_name from st_crm.t_class c where c.id=h.class_id
+		) className
+		,(select true_name from st_crm.t_user u where
+		u.id=h.teacher_id ) teacherName
+		from st_crm.t_homework h
+		<include refid="Example_Where_Clause" />
+	</select>
+
+</mapper>
