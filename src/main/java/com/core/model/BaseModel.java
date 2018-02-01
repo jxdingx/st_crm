@@ -17,7 +17,6 @@ public class BaseModel extends PagerModel {
 	private String remark;
 
 	public Integer getId() {
-		System.out.println("ssssssss");
 		return id;
 	}
 
